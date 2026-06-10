@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>raspberry</title>
+  <meta name="description" content="raspberry — drop 001">
+  <link rel="icon" href="data:,">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #000; }
+
+  .rasp-site { font-family: 'JetBrains Mono', monospace; background: #000; color: #fff; min-height: 100vh; position: relative; }
+
+  .landing {
+    min-height: 820px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(192,24,42,0.25), transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(120,40,90,0.25), transparent 40%),
+      repeating-linear-gradient(0deg, #0a0a0a, #0a0a0a 2px, #0d0d0d 2px, #0d0d0d 4px),
+      #080808;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 20px; position: relative; overflow: hidden;
+  }
+  .skyline { position: absolute; inset: 0; opacity: 0.55; pointer-events: none; }
+  .neon-box {
+    position: absolute; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    border-radius: 2px; font-size: 22px; letter-spacing: 2px; opacity: 0.85; text-shadow: 0 0 12px currentColor;
+  }
+  .emoji-float {
+    position: absolute; pointer-events: none; opacity: 0.5;
+    filter: drop-shadow(0 0 10px rgba(192,24,42,0.4));
+  }
+
+  .logo-card { width: 300px; background: #000; border: 1px solid #1a1a1a; padding: 26px 26px 30px; z-index: 5; box-shadow: 0 0 40px rgba(0,0,0,0.8); }
+  .logo-card .brand { font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 10px; }
+  .logo-berry { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+
+  .subscribe-box { width: 300px; margin-top: 16px; border: 1px solid #2a2a2a; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; z-index: 5; cursor: text; }
+  .subscribe-box .arrow { color: #c0182a; font-size: 18px; }
+
+  .landing-nav { width: 300px; margin-top: 16px; border: 1px solid #1a1a1a; background: rgba(0,0,0,0.7); padding: 22px 0 18px 0; z-index: 5; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  .landing-nav a { color: #fff; text-decoration: none; font-weight: 700; font-size: 15px; padding-left: 26px; transition: color 0.15s, padding-left 0.15s; cursor: pointer; }
+  .landing-nav a:hover { color: #c0182a; padding-left: 32px; }
+  .social-row { display: flex; gap: 14px; padding: 14px 0 0 26px; font-size: 15px; color: #666; }
+  .social-row span { cursor: pointer; transition: color 0.15s; }
+  .social-row span:hover { color: #c0182a; }
+
+  .shop { background: #000; min-height: 700px; padding: 40px 28px 28px; display: grid; grid-template-columns: 240px 1fr; gap: 28px; }
+  .sidebar { display: flex; flex-direction: column; gap: 18px; }
+  .side-logo { border: 1px solid #1a1a1a; padding: 22px; }
+  .side-logo .brand { font-size: 32px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
+  .side-berry { width: 100%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+  .cart-box { border: 1px solid #1a1a1a; padding: 14px; }
+  .cart-head { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 16px; }
+  .cart-cur { font-size: 13px; color: #888; cursor: pointer; }
+  .cart-divider { height: 1px; background: #1a1a1a; margin: 12px 0; }
+  .cart-count { font-size: 14px; margin-bottom: 12px; }
+  .cart-btns { display: flex; gap: 8px; }
+  .cart-btns button { flex: 1; background: none; border: 1px solid #2a2a2a; color: #fff; font-family: inherit; padding: 9px 0; cursor: pointer; font-size: 13px; transition: all 0.15s; }
+  .cart-btns button:hover { background: #c0182a; border-color: #c0182a; }
+
+  .main-col { display: flex; flex-direction: column; }
+  .shop-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .search { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; cursor: text; }
+  .search .ico { color: #888; }
+  .top-right { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+  .toggle-pill { display: flex; border: 1px solid #2a2a2a; }
+  .toggle-pill span { padding: 3px 9px; cursor: pointer; }
+  .toggle-pill .on { background: #fff; color: #000; }
+  .filter { font-weight: 700; cursor: pointer; }
+
+  .cats { display: flex; gap: 16px; flex-wrap: wrap; font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+  .cats a { color: #fff; text-decoration: none; cursor: pointer; transition: color 0.15s; }
+  .cats a:hover { color: #c0182a; }
+  .cats a.active { text-decoration: underline; }
+
+  .collections { font-size: 13px; color: #777; margin-bottom: 18px; line-height: 1.7; }
+  .collections b { color: #c0182a; font-weight: 400; cursor: pointer; }
+  .collections b:hover { text-decoration: underline; }
+
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+  .tile { background: #fff; aspect-ratio: 1; position: relative; cursor: pointer; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .tile .hoodie-wrap { width: 84%; height: 84%; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.3s; }
+  .tile:hover .hoodie-wrap { transform: scale(1.04); }
+  .tile .price-tag { position: absolute; bottom: 0; right: 0; background: #000; color: #fff; font-size: 11px; padding: 4px 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 3px; }
+  .tile .char-name { position: absolute; top: 0; left: 0; background: #c0182a; color: #fff; font-size: 10px; padding: 3px 7px; letter-spacing: 1px; text-transform: uppercase; }
+  .tile .sold { position: absolute; bottom: 0; right: 0; background: #000; color: #fff; font-size: 13px; font-weight: 700; padding: 5px 10px; }
+
+  .footer-nav { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 26px; font-weight: 700; font-size: 14px; }
+  .footer-nav a { color: #fff; text-decoration: none; cursor: pointer; transition: color 0.15s; }
+  .footer-nav a:hover { color: #c0182a; }
+  .footer-nav a.active { text-decoration: underline; }
+
+  .legal { text-align: center; color: #444; font-size: 12px; margin-top: 18px; letter-spacing: 1px; }
+
+  .view-switch { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; border: 1px solid #2a2a2a; background: #000; }
+  .view-switch button { background: none; border: none; color: #888; font-family: 'JetBrains Mono', monospace; padding: 6px 16px; cursor: pointer; font-size: 12px; letter-spacing: 1px; }
+  .view-switch button.active { background: #c0182a; color: #fff; }
+
+  .riyal { width: 0.9em; height: 0.9em; vertical-align: -0.05em; display: inline-block; }
+
+  .hidden { display: none !important; }
+  @media (max-width: 640px) { .shop { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .loading { grid-column: 1/-1; text-align: center; color: #888; padding: 60px 0; font-size: 13px; }
+
+  .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 90; }
+  .cart-drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 320px; max-width: 90vw; background: #0a0a0a; border-left: 1px solid #2a2a2a; z-index: 91; display: flex; flex-direction: column; padding: 20px; }
+  .cart-drawer-head { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #1a1a1a; }
+  .cart-close { cursor: pointer; color: #888; }
+  .cart-close:hover { color: #c0182a; }
+  .cart-drawer-items { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+  .cart-line { display: flex; gap: 10px; align-items: center; }
+  .cart-line img { width: 50px; height: 50px; object-fit: cover; background: #f4f1ec; }
+  .cart-line-info { flex: 1; font-size: 13px; }
+  .cart-line-title { font-weight: 700; margin-bottom: 4px; }
+  .cart-line-qty { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+  .cart-line-qty button { background: none; border: 1px solid #2a2a2a; color: #fff; width: 22px; height: 22px; cursor: pointer; font-family: inherit; }
+  .cart-line-remove { color: #888; cursor: pointer; font-size: 12px; text-decoration: underline; }
+  .cart-line-remove:hover { color: #c0182a; }
+  .cart-empty { color: #888; font-size: 13px; text-align: center; margin-top: 40px; }
+  .cart-drawer-foot { border-top: 1px solid #1a1a1a; padding-top: 14px; margin-top: 12px; }
+  .cart-total-row { display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 12px; align-items: center; }
+  .checkout-btn { width: 100%; background: #c0182a; border: none; color: #fff; padding: 12px; font-family: inherit; font-weight: 700; cursor: pointer; letter-spacing: 1px; }
+  .checkout-btn:hover { background: #e02040; }
+  .checkout-btn:disabled { background: #2a2a2a; cursor: not-allowed; }
+</style>
+</head>
+<body>
+<div class="rasp-site">
+
+  <div class="view-switch">
+    <button id="btn-landing" class="active" onclick="showView('landing')">LANDING</button>
+    <button id="btn-shop" onclick="showView('shop')">SHOP</button>
+  </div>
+
+  <!-- LANDING -->
+  <div class="landing" id="view-landing">
+    <div class="skyline">
+      <!-- neon billboard boxes -->
+      <div class="neon-box" style="top:5%; left:6%; width:88px; height:120px; background:#c0182a; color:#fff;">苺</div>
+      <div class="neon-box" style="top:9%; left:26%; width:130px; height:56px; background:#1a1a1a; color:#ff3860; border:1px solid #c0182a;">RASPBERRY</div>
+      <div class="neon-box" style="top:3%; right:20%; width:78px; height:150px; background:#c0182a; color:#000;">苺</div>
+      <div class="neon-box" style="top:12%; right:4%; width:108px; height:64px; background:#0fd; color:#000; font-size:13px;">DROP 001</div>
+      <div class="neon-box" style="top:33%; left:3%; width:66px; height:88px; background:#fc0; color:#000; font-size:13px;">気分</div>
+      <!-- SAR riyal neon sign -->
+      <div class="neon-box" style="top:30%; right:6%; width:96px; height:60px; background:#1a1a1a; color:#0fd; border:1px solid #0fd; gap:6px; font-size:15px;">
+        <svg class="riyal" viewBox="0 0 1124.14 1256.39" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;"><path d="M699.62,1113.02h0c-20.06,44.48-33.32,92.75-38.4,143.37l424.51-90.24c20.06-44.47,33.31-92.75,38.4-143.37l-424.51,90.24Z"/><path d="M1085.73,895.8c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.33v-135.2l292.27-62.11c20.06-44.47,33.32-92.75,38.4-143.37l-330.68,70.27V66.13c-50.67,28.45-95.67,66.32-132.25,110.99v403.35l-132.25,28.11V0c-50.67,28.44-95.67,66.32-132.25,110.99v525.42l-295.91,62.88c-20.06,44.47-33.33,92.75-38.42,143.37l334.33-71.05v170.26l-358.3,76.14c-20.06,44.47-33.32,92.75-38.4,143.37l375.04-79.7c30.53-6.49,52.34-33.45,52.34-64.66v-183.79l132.25-28.11v183.4c0,21.27,18.96,37.55,39.78,34.14,3.86-.63,7.59-1.36,11.34-2.5l350.86-74.59v-135.2l-330.68,70.27v-135.2l295.28-62.78Z"/></svg>
+        SAR
+      </div>
+      <div class="neon-box" style="top:48%; left:7%; width:74px; height:74px; background:#9b5cc4; color:#fff; font-size:30px;">🌙</div>
+      <div class="neon-box" style="bottom:6%; right:9%; width:96px; height:74px; background:#5aaa62; color:#000; font-size:30px;">🐸</div>
+      <div class="neon-box" style="bottom:20%; left:12%; width:80px; height:56px; background:#c04040; color:#fff; font-size:26px;">🍓</div>
+      <div class="neon-box" style="top:20%; left:18%; width:60px; height:60px; background:#b08030; color:#000; font-size:26px;">🔥</div>
+      <div class="neon-box" style="bottom:30%; right:18%; width:64px; height:64px; background:#90a0aa; color:#000; font-size:26px;">☁️</div>
+      <div class="neon-box" style="top:6%; left:46%; width:50px; height:50px; background:#1a1a1a; color:#fff; border:1px solid #5090a8; font-size:24px;">🦋</div>
+      <div class="neon-box" style="bottom:8%; left:30%; width:56px; height:56px; background:#fc0; color:#000; font-size:24px;">⭐</div>
+      <div class="neon-box" style="top:42%; right:14%; width:54px; height:54px; background:#1a1a1a; color:#fff; border:1px solid #888; font-size:24px;">👻</div>
+      <div class="neon-box" style="bottom:24%; right:30%; width:48px; height:48px; background:#5a8040; color:#000; font-size:22px;">🌵</div>
+      <div class="neon-box" style="top:24%; left:38%; width:46px; height:46px; background:#708090; color:#fff; font-size:22px;">🌧️</div>
+      <div class="neon-box" style="bottom:14%; left:2%; width:52px; height:52px; background:#988060; color:#000; font-size:22px;">🐌</div>
+      <!-- small floating emojis (no box) -->
+      <div class="emoji-float" style="top:16%; right:34%; font-size:30px;">🍓</div>
+      <div class="emoji-float" style="bottom:38%; left:24%; font-size:26px;">🌙</div>
+      <div class="emoji-float" style="top:54%; right:24%; font-size:28px;">🐸</div>
+      <div class="emoji-float" style="bottom:44%; right:4%; font-size:24px;">✨</div>
+      <div class="emoji-float" style="top:38%; left:30%; font-size:22px;">💭</div>
+    </div>
+
+    <div class="logo-card">
+      <div class="brand">raspberry</div>
+      <div class="logo-berry" id="logo-landing"></div>
+    </div>
+
+    <div class="subscribe-box" onclick="document.getElementById('sub-input').focus()">
+      <input id="sub-input" type="text" placeholder="Subscribe" style="background:none;border:none;color:#fff;font-family:inherit;font-size:14px;outline:none;width:80%;">
+      <span class="arrow">→</span>
+    </div>
+
+    <div class="landing-nav">
+      <a onclick="showView('shop')">shop</a>
+      <a onclick="showView('shop')">lookbook</a>
+      <a onclick="showView('shop')">archive</a>
+      <a onclick="showView('shop')">shipping</a>
+      <a onclick="showView('shop')">contact</a>
+      <a onclick="showView('shop')">retail stores</a>
+      <a onclick="showView('shop')">stickers</a>
+      <div class="social-row"><span>ⓕ</span><span>◎</span><span>♪</span><span>𝕏</span><span>⌘</span><span>▷</span></div>
+    </div>
+  </div>
+
+  <!-- SHOP -->
+  <div class="shop hidden" id="view-shop">
+    <div class="sidebar">
+      <div class="side-logo">
+        <div class="brand">raspberry</div>
+        <div class="side-berry" id="logo-shop"></div>
+      </div>
+      <div class="cart-box">
+        <div class="cart-head"><span>CART</span><span class="cart-cur">SAR ⌄</span></div>
+        <div class="cart-divider"></div>
+        <div class="cart-count">0 Items</div>
+        <div class="cart-btns"><button onclick="openCart()">cart</button><button onclick="showView('shop')">shop</button></div>
+      </div>
+    </div>
+
+    <div class="main-col">
+      <div class="shop-top">
+        <div class="search"><span class="ico">⌕</span> SEARCH</div>
+        <div class="top-right">
+          <div class="toggle-pill"><span class="on">MOOD</span><span>PLAIN</span></div>
+          <span class="filter">⊟ filter</span>
+        </div>
+      </div>
+
+      <div class="cats">
+        <a class="active">ALL</a><a>POPULAR</a><a>HOODIES</a><a>CREWNECKS</a><a>TEES</a><a>ACCESSORIES</a>
+      </div>
+
+      <div class="collections">
+        characters: <b>"unbothered frog"</b> · <b>"depressed moon"</b> · <b>"anxious strawberry"</b> · <b>"cold flame"</b> · <b>"overthinking cloud"</b> · <b>"numb rock"</b>
+      </div>
+
+      <div class="grid" id="product-grid"></div>
+
+      <div class="footer-nav">
+        <a class="active" onclick="showView('shop')">shop</a><a>lookbook</a><a>archive</a><a>shipping</a><a>contact</a><a>retail stores</a><a>stickers</a><a onclick="showView('landing')">home</a>
+      </div>
+
+      <div class="legal">terms of service • legal notice • privacy • refund</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cart-overlay hidden" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer hidden" id="cart-drawer">
+  <div class="cart-drawer-head"><span>CART</span><span class="cart-close" onclick="closeCart()">✕</span></div>
+  <div class="cart-drawer-items" id="cart-items"></div>
+  <div class="cart-drawer-foot">
+    <div class="cart-total-row"><span>SUBTOTAL</span><span id="cart-total"></span></div>
+    <button class="checkout-btn" id="checkout-btn" disabled>CHECKOUT</button>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/shopify.js"></script>
+<script>
+  const embLogo = `<svg viewBox="20 20 220 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="stitch-red" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#c0182a"/><line x1="0" y1="1.5" x2="3" y2="1.5" stroke="#e02040" stroke-width="0.8"/><line x1="1.5" y1="0" x2="1.5" y2="3" stroke="#a01020" stroke-width="0.5" opacity="0.5"/></pattern>
+        <pattern id="stitch-red2" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#aa1424"/><line x1="0" y1="1.5" x2="3" y2="1.5" stroke="#cc1e32" stroke-width="0.8"/><line x1="1.5" y1="0" x2="1.5" y2="3" stroke="#8a0e1c" stroke-width="0.5" opacity="0.5"/></pattern>
+        <pattern id="stitch-red3" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#d01e30"/><line x1="0" y1="1.5" x2="3" y2="1.5" stroke="#e83048" stroke-width="0.8"/><line x1="1.5" y1="0" x2="1.5" y2="3" stroke="#b01428" stroke-width="0.5" opacity="0.5"/></pattern>
+        <pattern id="stitch-green" x="0" y="0" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" fill="#2e7428"/><line x1="0" y1="1.5" x2="3" y2="1.5" stroke="#3a9030" stroke-width="0.8"/><line x1="1.5" y1="0" x2="1.5" y2="3" stroke="#1e5818" stroke-width="0.5" opacity="0.5"/></pattern>
+        <pattern id="stitch-stem" x="0" y="0" width="2" height="2" patternUnits="userSpaceOnUse"><rect width="2" height="2" fill="#3a8830"/><line x1="0" y1="1" x2="2" y2="1" stroke="#4aaa3a" stroke-width="0.7"/></pattern>
+      </defs>
+      <circle cx="98" cy="178" r="24" fill="url(#stitch-red2)"/><circle cx="98" cy="178" r="24" fill="none" stroke="#e02040" stroke-width="1.2" opacity="0.6"/><circle cx="98" cy="178" r="20" fill="none" stroke="#8a0e1c" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="130" cy="182" r="24" fill="url(#stitch-red)"/><circle cx="130" cy="182" r="24" fill="none" stroke="#f03050" stroke-width="1.2" opacity="0.6"/><circle cx="130" cy="182" r="20" fill="none" stroke="#900c1e" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="162" cy="178" r="24" fill="url(#stitch-red3)"/><circle cx="162" cy="178" r="24" fill="none" stroke="#e02848" stroke-width="1.2" opacity="0.6"/><circle cx="162" cy="178" r="20" fill="none" stroke="#8e0e20" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="98" cy="134" r="24" fill="url(#stitch-red3)"/><circle cx="98" cy="134" r="24" fill="none" stroke="#e02848" stroke-width="1.2" opacity="0.6"/><circle cx="98" cy="134" r="20" fill="none" stroke="#8e0e20" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="130" cy="130" r="24" fill="url(#stitch-red)"/><circle cx="130" cy="130" r="24" fill="none" stroke="#f03050" stroke-width="1.2" opacity="0.6"/><circle cx="130" cy="130" r="20" fill="none" stroke="#900c1e" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="162" cy="134" r="24" fill="url(#stitch-red2)"/><circle cx="162" cy="134" r="24" fill="none" stroke="#e02040" stroke-width="1.2" opacity="0.6"/><circle cx="162" cy="134" r="20" fill="none" stroke="#8a0e1c" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="110" cy="94" r="23" fill="url(#stitch-red2)"/><circle cx="110" cy="94" r="23" fill="none" stroke="#e02040" stroke-width="1.2" opacity="0.6"/><circle cx="110" cy="94" r="19" fill="none" stroke="#8a0e1c" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="150" cy="94" r="23" fill="url(#stitch-red3)"/><circle cx="150" cy="94" r="23" fill="none" stroke="#e02848" stroke-width="1.2" opacity="0.6"/><circle cx="150" cy="94" r="19" fill="none" stroke="#8e0e20" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="130" cy="82" r="24" fill="url(#stitch-red)"/><circle cx="130" cy="82" r="24" fill="none" stroke="#f03050" stroke-width="1.2" opacity="0.6"/><circle cx="130" cy="82" r="20" fill="none" stroke="#900c1e" stroke-width="0.6" opacity="0.4"/>
+      <g stroke="#7a0c18" stroke-width="1.4" opacity="0.7" fill="none" stroke-linecap="round"><path d="M108 110 Q130 103 152 110"/><path d="M96 154 Q113 147 128 151"/><path d="M132 151 Q148 147 164 154"/></g>
+      <g opacity="0.45" stroke="none"><line x1="124" y1="74" x2="128" y2="68" stroke="#ffaaaa" stroke-width="1.2" stroke-linecap="round"/><line x1="127" y1="72" x2="131" y2="67" stroke="#ffaaaa" stroke-width="1" stroke-linecap="round"/><line x1="130" y1="73" x2="133" y2="68" stroke="#ffaaaa" stroke-width="0.8" stroke-linecap="round"/><line x1="103" y1="86" x2="106" y2="80" stroke="#ffaaaa" stroke-width="1.2" stroke-linecap="round"/><line x1="106" y1="84" x2="109" y2="79" stroke="#ffaaaa" stroke-width="1" stroke-linecap="round"/><line x1="143" y1="86" x2="146" y2="80" stroke="#ffaaaa" stroke-width="1.2" stroke-linecap="round"/><line x1="146" y1="84" x2="149" y2="79" stroke="#ffaaaa" stroke-width="1" stroke-linecap="round"/></g>
+      <path d="M130 67 Q128 53 126 42" stroke="url(#stitch-stem)" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M130 67 Q128 53 126 42" stroke="#4aaa3a" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="3,2" opacity="0.7"/>
+      <path d="M128 67 Q126 53 124 42" stroke="#1e5818" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.5"/>
+      <path d="M126 56 Q103 40 88 48 Q100 59 113 62 Q120 59 126 56Z" fill="url(#stitch-green)"/>
+      <path d="M126 56 Q103 40 88 48 Q100 59 113 62 Q120 59 126 56Z" fill="none" stroke="#3a9030" stroke-width="1.2" opacity="0.7"/>
+      <path d="M126 56 Q107 50 92 50" stroke="#1e5818" stroke-width="0.9" fill="none" opacity="0.6" stroke-linecap="round"/>
+      <path d="M100 46 Q107 43 112 47" stroke="#88dd70" stroke-width="1" fill="none" opacity="0.5" stroke-linecap="round"/>
+      <path d="M128 54 Q150 37 165 45 Q153 57 140 60 Q133 57 128 54Z" fill="url(#stitch-green)"/>
+      <path d="M128 54 Q150 37 165 45 Q153 57 140 60 Q133 57 128 54Z" fill="none" stroke="#3a9030" stroke-width="1.2" opacity="0.7"/>
+      <path d="M128 54 Q148 44 162 47" stroke="#1e5818" stroke-width="0.9" fill="none" opacity="0.6" stroke-linecap="round"/>
+      <path d="M148 40 Q155 38 159 43" stroke="#88dd70" stroke-width="1" fill="none" opacity="0.5" stroke-linecap="round"/>
+      <path d="M127 50 Q130 36 133 50 Q131 46 127 50Z" fill="url(#stitch-green)"/>
+    </svg>`;
+
+  document.getElementById('logo-landing').innerHTML = embLogo;
+  document.getElementById('logo-shop').innerHTML = embLogo.replace(/id="(stitch-red|stitch-red2|stitch-red3|stitch-green|stitch-stem)"/g, 'id="$1-s"').replace(/url\(#(stitch-red|stitch-red2|stitch-red3|stitch-green|stitch-stem)\)/g, 'url(#$1-s)');
+
+  function showView(v) {
+    document.getElementById('view-landing').classList.toggle('hidden', v !== 'landing');
+    document.getElementById('view-shop').classList.toggle('hidden', v !== 'shop');
+    document.getElementById('btn-landing').classList.toggle('active', v === 'landing');
+    document.getElementById('btn-shop').classList.toggle('active', v === 'shop');
+  }
+
+  function placeholderSVG() {
+    return `<svg viewBox="0 0 200 220" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 110 L30 210 L170 210 L160 110" fill="#ccc"/>
+        <path d="M55 75 L40 110 L160 110 L145 75" fill="#ccc"/>
+        <path d="M40 110 L15 175 L36 180 L58 118" fill="#ccc"/>
+        <path d="M160 110 L185 175 L164 180 L142 118" fill="#ccc"/>
+        <rect x="72" y="160" width="56" height="36" rx="2" fill="rgba(0,0,0,0.12)"/>
+        <path d="M55 75 Q60 30 100 26 Q140 30 145 75 Q130 68 115 73 Q100 65 85 73 Q70 68 55 75Z" fill="#ccc" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+        <path d="M68 72 Q100 56 132 72 Q118 64 100 62 Q82 64 68 72Z" fill="rgba(0,0,0,0.18)"/>
+        <text x="100" y="56" text-anchor="middle" font-size="24">🍓</text>
+      </svg>`;
+  }
+
+  const grid = document.getElementById('product-grid');
+
+  function renderProductTile(product) {
+    const variant = product.variants.edges[0]?.node;
+    const price = variant?.price || product.priceRange.minVariantPrice;
+    const sold = !(variant?.availableForSale ?? product.availableForSale);
+    const img = product.featuredImage?.url;
+
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.style.background = '#f4f1ec';
+    tile.innerHTML = `
+      <div class="char-name">${product.title}</div>
+      <div class="hoodie-wrap">${img ? `<img src="${img}" alt="${product.title}" style="width:100%;height:100%;object-fit:cover;">` : placeholderSVG()}</div>
+      ${sold ? '<div class="sold">sold out</div>' : `<div class="price-tag">${ShopifyAPI.formatPrice(price.amount, price.currencyCode)}</div>`}
+    `;
+    if (!sold && variant) {
+      tile.addEventListener('click', () => addToCart(variant.id));
+    }
+    grid.appendChild(tile);
+  }
+
+  async function loadProducts() {
+    grid.innerHTML = '<div class="loading">loading drop...</div>';
+    try {
+      const products = await ShopifyAPI.fetchProducts(24);
+      if (!products.length) {
+        grid.innerHTML = '<div class="loading">no products yet — add some in your Shopify admin</div>';
+        return;
+      }
+      grid.innerHTML = '';
+      products.forEach(renderProductTile);
+    } catch (err) {
+      grid.innerHTML = `<div class="loading">couldn't load products — check js/config.js (${err.message})</div>`;
+    }
+  }
+
+  // ---- cart ----
+  let currentCart = null;
+
+  function openCart() {
+    document.getElementById('cart-overlay').classList.remove('hidden');
+    document.getElementById('cart-drawer').classList.remove('hidden');
+  }
+  function closeCart() {
+    document.getElementById('cart-overlay').classList.add('hidden');
+    document.getElementById('cart-drawer').classList.add('hidden');
+  }
+
+  function renderCart(cart) {
+    currentCart = cart;
+    const items = cart.lines.edges.map(e => e.node);
+
+    document.querySelectorAll('.cart-count').forEach(el => {
+      el.textContent = `${cart.totalQuantity} Item${cart.totalQuantity === 1 ? '' : 's'}`;
+    });
+
+    const itemsEl = document.getElementById('cart-items');
+    if (!items.length) {
+      itemsEl.innerHTML = '<div class="cart-empty">your cart is empty</div>';
+    } else {
+      itemsEl.innerHTML = items.map(line => {
+        const m = line.merchandise;
+        const img = m.product.featuredImage?.url || '';
+        return `<div class="cart-line">
+          ${img ? `<img src="${img}" alt="">` : ''}
+          <div class="cart-line-info">
+            <div class="cart-line-title">${m.product.title}</div>
+            <div>${ShopifyAPI.formatPrice(m.price.amount, m.price.currencyCode)}</div>
+            <div class="cart-line-qty">
+              <button onclick="changeQty('${line.id}', ${line.quantity - 1})">−</button>
+              <span>${line.quantity}</span>
+              <button onclick="changeQty('${line.id}', ${line.quantity + 1})">+</button>
+              <span class="cart-line-remove" onclick="removeLine('${line.id}')">remove</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    document.getElementById('cart-total').innerHTML = ShopifyAPI.formatPrice(cart.cost.subtotalAmount.amount, cart.cost.subtotalAmount.currencyCode);
+    const checkoutBtn = document.getElementById('checkout-btn');
+    checkoutBtn.disabled = cart.totalQuantity === 0;
+    checkoutBtn.onclick = () => { window.location.href = cart.checkoutUrl; };
+  }
+
+  async function addToCart(variantId) {
+    try {
+      const cart = await ShopifyAPI.addToCart(variantId, 1);
+      renderCart(cart);
+      openCart();
+    } catch (err) {
+      alert(`couldn't add to cart: ${err.message}`);
+    }
+  }
+
+  async function changeQty(lineId, qty) {
+    if (qty <= 0) return removeLine(lineId);
+    const cart = await ShopifyAPI.updateCartLine(currentCart.id, lineId, qty);
+    renderCart(cart);
+  }
+
+  async function removeLine(lineId) {
+    const cart = await ShopifyAPI.removeCartLines(currentCart.id, [lineId]);
+    renderCart(cart);
+  }
+
+  loadProducts();
+  ShopifyAPI.getOrCreateCart().then(renderCart).catch(err => console.error('cart init failed', err));
+</script>
+</body>
+</html>
