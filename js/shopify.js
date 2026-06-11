@@ -31,15 +31,21 @@
             id
             title
             handle
+            description
             availableForSale
             featuredImage { url altText }
+            images(first: 10) {
+              edges { node { url altText } }
+            }
             priceRange { minVariantPrice { amount currencyCode } }
-            variants(first: 1) {
+            variants(first: 25) {
               edges {
                 node {
                   id
+                  title
                   availableForSale
                   price { amount currencyCode }
+                  selectedOptions { name value }
                 }
               }
             }
