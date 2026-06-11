@@ -136,7 +136,8 @@
 
   .loading { grid-column: 1/-1; text-align: center; color: #888; padding: 60px 0; font-size: 13px; }
 
-  .cart-page { padding: 40px 28px 28px; }
+  .cart-page { background: #000; min-height: 700px; padding: 40px 28px 28px; display: grid; grid-template-columns: 240px 1fr; gap: 28px; }
+  .cart-main { min-width: 0; }
   .cart-page-title { font-size: 22px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; }
   .cart-page-panel { background: #f4f1ec; color: #111; max-width: 880px; padding: 0 28px; }
   .cart-page-head { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 20px 0 14px; border-bottom: 1px solid #ddd6c9; }
@@ -163,6 +164,7 @@
   .cart-page-checkout:hover { background: #e02040; }
   .cart-page-checkout:disabled { background: #2a2a2a; cursor: not-allowed; }
   @media (max-width: 640px) {
+    .cart-page { grid-template-columns: 1fr; }
     .cart-page-line img { width: 64px; height: 64px; }
     .cart-page-line-right { min-height: 64px; }
     .cart-page-panel { padding: 0 14px; }
@@ -296,6 +298,19 @@
 
   <!-- CART -->
   <div class="cart-page hidden" id="view-cart">
+    <div class="sidebar">
+      <div class="side-logo">
+        <div class="brand">raspberry</div>
+        <div class="side-berry" id="logo-cart"></div>
+      </div>
+      <div class="cart-box">
+        <div class="cart-head"><span>CART</span><span class="cart-cur">SAR ⌄</span></div>
+        <div class="cart-divider"></div>
+        <div class="cart-count">0 Items</div>
+        <div class="cart-btns"><button onclick="showView('cart')">cart</button><button onclick="showView('shop')">shop</button></div>
+      </div>
+    </div>
+    <div class="cart-main">
     <div class="product-back" onclick="showView('shop')">&larr; back to shop</div>
     <div class="cart-page-title">YOUR CART</div>
     <div class="cart-page-panel">
@@ -306,6 +321,7 @@
     </div>
     <div class="cart-page-checkout-wrap">
       <button class="cart-page-checkout" id="checkout-btn" disabled>CHECK OUT</button>
+    </div>
     </div>
   </div>
 
@@ -349,6 +365,7 @@
 
   document.getElementById('logo-landing').innerHTML = embLogo;
   document.getElementById('logo-shop').innerHTML = embLogo.replace(/id="(stitch-red|stitch-red2|stitch-red3|stitch-green|stitch-stem)"/g, 'id="$1-s"').replace(/url\(#(stitch-red|stitch-red2|stitch-red3|stitch-green|stitch-stem)\)/g, 'url(#$1-s)');
+  document.getElementById('logo-cart').innerHTML = embLogo.replace(/id="(stitch-red|stitch-red2|stitch-red3|stitch-green|stitch-stem)"/g, 'id="$1-c"').replace(/url\(#(stitch-red|stitch-red2|stitch-red3|stitch-green|stitch-stem)\)/g, 'url(#$1-c)');
 
   function showView(v) {
     document.getElementById('view-landing').classList.toggle('hidden', v !== 'landing');
