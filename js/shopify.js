@@ -31,7 +31,7 @@
             id
             title
             handle
-            description
+            descriptionHtml
             availableForSale
             featuredImage { url altText }
             images(first: 10) {
